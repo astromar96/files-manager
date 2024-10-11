@@ -1,10 +1,13 @@
+"use client";
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSelect } from '@/app/reducers/items';
+import { openFolder } from '@/app/reducers/ui';
 
 
 const FileContainer = styled(Grid)(({ theme  , selected}) => ({
@@ -14,12 +17,10 @@ const FileContainer = styled(Grid)(({ theme  , selected}) => ({
     justifyContent: 'center',
     flexDirection: 'column',
     gap: theme.spacing(2),
-    // border: '2px solid #1976d2',
     userSelect: 'none',
     alignItems: 'center',
     padding: '10px 20px',
     borderRadius: theme.spacing(2),
-    // cursor: 'pointer',
     backgroundColor: selected ? '#1876d2' : 'transparent',
     color: selected ? 'white' : 'black',
     '& svg': {
@@ -42,15 +43,7 @@ const FileContainer = styled(Grid)(({ theme  , selected}) => ({
         outile:'none',
         border:'0.5px solid transparent',
         padding: theme.spacing(1),
-        '[contentEditable="true"]': {
-            cursor: 'text',
-        },
-        '&:focus': {
-            outline: 'none',
-            border:`${state === 'error' ? '0.5px solid #ff1744' : '0.5px solid #1565c0'}`,
-            borderRadius: theme.spacing(0.5),
-            color:`${state === 'error' ? '#ff1744' : 'black'}`,
-        }
+        textAlign: 'center',
     })}
   `
 
@@ -66,29 +59,25 @@ const FileContainer = styled(Grid)(({ theme  , selected}) => ({
 
   export default function Item({type, name , id}) { 
 
-    const [selected, setSelected] = useState(false);
+    const dispatch = useDispatch();
+    const selected = useSelector(state => state.items.selected.includes(id));
     const handleClick = () => { 
-        setSelected(!selected);
+        dispatch(toggleSelect(id));
     }
-    const handleUnselect = () => {
-        if(selected) {
-            setSelected(false);
+    const handleDoubleClick = () => {
+        if(type === 'folder') {
+            dispatch(openFolder(id))
         }
     }
+
     return (
-        <FileContainer selected={selected} size={{ xs: 6, md: 3, lg: 2 }} onClick={handleUnselect}>
+        <FileContainer selected={selected} size={{ xs: 6, md: 3, lg: 2 }} onDoubleClick={handleDoubleClick}>
             <IconContainer  onClick={handleClick}>
                 {type === 'folder' ? <Folder color='info' /> : <File color='disabled' />}
             </IconContainer>
-        <Name state={''} contentEditable={!selected} align='center' onInput={(e)=>{
-          console.log(e.target.innerText);
-        }}
-        onBlur={(e)=>{
-          console.log(e.target.innerText, 'blur');
-        }}
-        >
-         {name}
-        </Name>
+            <Name>
+            {name}
+            </Name>
       </FileContainer>
     )
   }

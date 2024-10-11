@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch, useSelector } from 'react-redux';
+import { openFolder } from '@/app/reducers/ui';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -54,19 +56,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+  const { navigationStack } = useSelector((state) => state.ui);
+  const currentDirName = useSelector((state) => state.items.items[navigationStack[navigationStack.length - 1]]?.name);
+  const dispatch = useDispatch();
+  const goBack = () => {
+    dispatch(openFolder(navigationStack[navigationStack.length - 2]));
+  }
+
   return (
     <Box>
       <AppBar position="static">
         <Toolbar>
+         {navigationStack[navigationStack.length - 1] ?  
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
+              onClick={goBack}
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+            >
+              <ArrowBackIosIcon />
+            </IconButton>:null
+          }
           <Typography
             variant="h6"
             noWrap
@@ -74,7 +86,7 @@ export default function Navbar() {
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
             fontSize={20}
           >
-            Files Manager
+            {currentDirName || 'Files Manager'}
           </Typography>
           <Search>
             <SearchIconWrapper>

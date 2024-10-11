@@ -6,17 +6,19 @@ import theme from './theme';
 import Navbar from './components/Navbar/Navbar';
 import './globals.css';
 import styled from '@emotion/styled';
-
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import { useState } from 'react';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FolderIcon from '@mui/icons-material/Folder';
+import StoreProvider from './StoreProvider';
+import CreateItem from './components/CreateItem/CreateItem';
+import DeleteItem from './components/DeleteItem/DeleteItem';
+import NewItemModal from './components/NewItemModal/NewItemModal';
+import EditItem from './components/EditItem/EditItem';
+import EmptyState from './components/EmptyState/EmptyState';
+
 
 const actions = [
-  { icon: <FolderIcon />, name: 'Create a new folder' },
-  { icon: <InsertDriveFileIcon />, name: 'Create a new file' },
+  { icon: <FolderIcon />, name: 'Create a new folder' , id: 'folder'},
+  { icon: <InsertDriveFileIcon />, name: 'Create a new file', id: 'file' },
 ];
 
 
@@ -34,38 +36,23 @@ const Main = styled('main')(({ theme }) => ({
 }));
 
  export default function RootLayout(props) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
    const { children } = props;
    return (
      <html lang="en">
       <body className={roboto.variable}>
           <AppRouterCacheProvider>
+          <StoreProvider>
            <ThemeProvider theme={theme}>
             <Main>
               <Navbar />
               {children}
-              <SpeedDial
-                ariaLabel="SpeedDial controlled open example"
-                sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                icon={<SpeedDialIcon />}
-                onClose={handleClose}
-                onOpen={handleOpen}
-                open={open}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={handleClose}
-                  />
-                ))}
-              </SpeedDial>
+             <CreateItem />
+             <DeleteItem />
+             <EditItem />
+             <NewItemModal />
             </Main>
            </ThemeProvider>
+          </StoreProvider>
           </AppRouterCacheProvider>
        </body>
      </html>
