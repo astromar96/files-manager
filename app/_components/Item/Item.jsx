@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSelect } from '@/app/reducers/items';
-import { openFolder } from '@/app/reducers/ui';
+import { useRouter } from 'next/navigation';
 
 
 const FileContainer = styled(Grid)(({ theme  , selected}) => ({
@@ -58,7 +58,7 @@ const FileContainer = styled(Grid)(({ theme  , selected}) => ({
   }));
 
   export default function Item({type, name , id}) { 
-
+    const router = useRouter();
     const dispatch = useDispatch();
     const selected = useSelector(state => state.items.selected.includes(id));
     const handleClick = () => { 
@@ -66,7 +66,7 @@ const FileContainer = styled(Grid)(({ theme  , selected}) => ({
     }
     const handleDoubleClick = () => {
         if(type === 'folder') {
-            dispatch(openFolder(id))
+           router.push(`?id=${id}`);
         }
     }
 

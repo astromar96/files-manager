@@ -1,10 +1,9 @@
-import {useEffect,useState , Fragment, useMemo} from 'react';
+import {useState , Fragment, useMemo} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, currentItemsSelector } from '@/app/reducers/ui';
@@ -18,7 +17,7 @@ export default function NewItemModal() {
     const itemType = useSelector(state => state.ui.itemType);
     const selectedItem = useSelector(state => state.ui.selectedItem);
     const items  = useSelector(currentItemsSelector);
-    const currentDirId = useSelector(state => state.ui.navigationStack[state.ui.navigationStack.length - 1]);
+    const currentDirId = useSelector(state => state.ui.currentDir?.id);
     const currentDirNames = useMemo(
       ()=> items.map(item=>item.name).filter((name)=>name !== items[currentDirId]?.name),
       [items,currentDirId]
@@ -29,7 +28,6 @@ export default function NewItemModal() {
             e.preventDefault();
             return;
         }
-        
         dispatch(closeModal())
     };
     

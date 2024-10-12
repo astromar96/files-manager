@@ -9,8 +9,8 @@ export const uiSlice = createSlice({
     currentFileId: null,
     currentDirNames: [],
     itemType: '',
-    navigationStack: [],
-    selectedItem: null
+    selectedItem: null,
+    currentDir:null,
   },
 
   reducers: {
@@ -39,10 +39,7 @@ export const uiSlice = createSlice({
     },
 
     openFolder(state, action) {
-        if(state.navigationStack[state.navigationStack.length - 1] === action.payload) {
-            state.navigationStack = state.navigationStack.filter(id => id !== action.payload).filter(Boolean)
-        }
-        state.navigationStack.push(action.payload);
+        state.currentDir = action.payload;
     },
     prepareNamesForCurrentDir(state, action) {
         state.currentDirNames = action.payload.names;
@@ -51,7 +48,7 @@ export const uiSlice = createSlice({
 })
 
 const itemsSelector = state => state.items;
-const currentDirIdSelector = state => state.ui.navigationStack[state.ui.navigationStack.length - 1];
+const currentDirIdSelector = state => state.ui.currentDir?.id;
 
 export const currentItemsSelector = createSelector([itemsSelector,currentDirIdSelector],(state,currentDirId)=> {
   if(currentDirId) {

@@ -3,17 +3,16 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './_components/Navbar/Navbar';
 import './globals.css';
 import styled from '@emotion/styled';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FolderIcon from '@mui/icons-material/Folder';
 import StoreProvider from './StoreProvider';
-import CreateItem from './components/CreateItem/CreateItem';
-import DeleteItem from './components/DeleteItem/DeleteItem';
-import NewItemModal from './components/NewItemModal/NewItemModal';
-import EditItem from './components/EditItem/EditItem';
-import EmptyState from './components/EmptyState/EmptyState';
+import CreateItem from './_components/CreateItem/CreateItem';
+import DeleteItem from './_components/DeleteItem/DeleteItem';
+import NewItemModal from './_components/NewItemModal/NewItemModal';
+import EditItem from './_components/EditItem/EditItem';
 
 
 const actions = [

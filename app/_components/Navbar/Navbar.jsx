@@ -8,9 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import SearchIcon from '@mui/icons-material/Search';
-import { useDispatch, useSelector } from 'react-redux';
-import { openFolder } from '@/app/reducers/ui';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -56,18 +56,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
-  const { navigationStack } = useSelector((state) => state.ui);
-  const currentDirName = useSelector((state) => state.items.items[navigationStack[navigationStack.length - 1]]?.name);
-  const dispatch = useDispatch();
+  const currentDir = useSelector((state) => state.ui.currentDir);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const goBack = () => {
-    dispatch(openFolder(navigationStack[navigationStack.length - 2]));
+    router.back();
   }
 
   return (
     <Box>
       <AppBar position="static">
         <Toolbar>
-         {navigationStack[navigationStack.length - 1] ?  
+         {currentDir != null ?  
           <IconButton
               onClick={goBack}
               size="large"
@@ -86,17 +86,8 @@ export default function Navbar() {
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
             fontSize={20}
           >
-            {currentDirName || 'Files Manager'}
+            {currentDir?.name || 'Files Manager'}
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
         </Toolbar>
       </AppBar>
     </Box>

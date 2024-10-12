@@ -7,7 +7,6 @@ export const itemsSlice = createSlice({
   initialState: {
     selected:[],
     items:{},
-    currentDir: null,
   },
   reducers: {
     addItem: (state, action) => {
